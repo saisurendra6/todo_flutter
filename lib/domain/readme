@@ -1,0 +1,7 @@
+Domain folder is independent of technologies.
+
+todo_repo.dart file will be implemented in data folder classes
+
+(Technology agnostic: independent of any Technology or Framwwork)
+
+The domain folder doesnot contain implementations which may vary when we change our db, state manager, etc...
