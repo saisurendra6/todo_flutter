@@ -64,7 +64,7 @@ class TodoView extends StatelessWidget {
         title: const Text("Enter new item"),
         content: TextField(
           controller: textController,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             border: OutlineInputBorder(),
           ),
         ),
