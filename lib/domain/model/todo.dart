@@ -17,7 +17,20 @@ class Todo {
     this.isCompleted = false,
   });
 
+  static Todo fromMap(Map<String, dynamic> map) {
+    return Todo(
+        id: map['id'], text: map['text'], isCompleted: map['isCompleted']);
+  }
+
   Todo toggleCompletion() {
     return Todo(id: id, text: text, isCompleted: !isCompleted);
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'text': text,
+      'isCompleted': isCompleted,
+    };
   }
 }

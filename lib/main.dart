@@ -1,34 +1,34 @@
+import 'dart:async';
+import 'dart:developer';
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:isar/isar.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:todo/data/models/isar_todo.dart';
-import 'package:todo/data/reposity/isar_todo_repo.dart';
-import 'package:todo/domain/repository/todo_repo.dart';
+import 'package:todo/data/reposity/firebase_todo_repo.dart';
+import 'package:todo/firebase_options.dart';
+import 'package:todo/presentation/auth_page.dart';
 import 'package:todo/presentation/todo_page.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // db path
-  final dir = await getApplicationDocumentsDirectory();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
-  // open isar db
-  final isar = await Isar.open([TodoIsarSchema], directory: dir.path);
+  final auth = FirebaseAuth.instance;
 
-  // init db
-  final isarTodoRepo = IsarTodoRepo(isar);
-
-  runApp(MyApp(todoRepo: isarTodoRepo));
+  runApp(MyApp(auth: auth));
 }
 
 class MyApp extends StatelessWidget {
-  final TodoRepo todoRepo;
-  const MyApp({super.key, required this.todoRepo});
-  // const MyApp({super.key});
+  final FirebaseAuth auth;
+  const MyApp({super.key, required this.auth});
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    log("MyApp auth:  ${auth.currentUser}");
     return MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
@@ -36,8 +36,9 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      // home: const MyHomePage(),
-      home: TodoPage(todoRepo: todoRepo),
+      home: (auth.currentUser != null)
+          ? TodoPage(todoRepo: FirebaseTodoRepo(auth.currentUser!.uid))
+          : const AuthPage(),
     );
   }
 }

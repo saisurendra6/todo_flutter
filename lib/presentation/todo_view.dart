@@ -14,6 +14,10 @@ class TodoView extends StatelessWidget {
   Widget build(BuildContext context) {
     final todoCubit = context.read<TodoCubit>();
     return Scaffold(
+      appBar: AppBar(
+        title: const Text("Todo"),
+        centerTitle: true,
+      ),
       body: BlocBuilder<TodoCubit, List<Todo>>(builder: (context, todos) {
         return ListView.builder(
             itemCount: todos.length,
@@ -56,8 +60,14 @@ class TodoView extends StatelessWidget {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
+        icon: const Icon(Icons.add_task_rounded),
         title: const Text("Enter new item"),
-        content: TextField(controller: textController),
+        content: TextField(
+          controller: textController,
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+          ),
+        ),
         actions: [
           // cancel btn
           TextButton(
